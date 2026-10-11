@@ -1,0 +1,593 @@
+# FLASHED — The Party Photographer
+## Instrucción maestra para Claude Code
+
+### 1. Rol y objetivo
+
+Actuá como desarrollador senior de videojuegos 2D especializado en Phaser 3, TypeScript, juegos arcade y beat ’em ups con alcance indie.
+
+Desarrollá un videojuego de navegador llamado provisionalmente **FLASHED — The Party Photographer**.
+
+El jugador interpreta a un fotógrafo profesional que trabaja en distintos tipos de eventos. Debe conseguir fotografías, desplazarse entre los invitados, evitar obstáculos y peligros ambientales, y cumplir los objetivos de cada trabajo.
+
+A medida que avanza la campaña, los eventos se vuelven más caóticos. La culminación es una pelea contra el DJ, responsable del espectáculo de luces y láseres que amenaza con arruinar el último trabajo del fotógrafo.
+
+El proyecto será desarrollado por una sola persona con asistencia de IA. La prioridad es conseguir un juego completo, divertido, liviano, visualmente coherente y viable de terminar.
+
+No te limites a crear una demostración visual o una especificación: implementá un videojuego realmente jugable.
+
+---
+
+### 2. Tecnología y restricciones
+
+Utilizá:
+
+- Phaser 3 como motor 2D.
+- TypeScript.
+- Vite para desarrollo y compilación.
+- HTML5 Canvas.
+- SVG o gráficos vectoriales cuando resulten útiles.
+- Recursos gráficos locales.
+- Web Audio API o sonidos locales para los efectos de audio.
+
+El juego debe ejecutarse en navegadores de escritorio modernos y poder publicarse en un hosting estático sin backend.
+
+Restricciones:
+- No usar un servidor para la lógica del juego.
+- No depender de servicios externos durante la partida.
+- No utilizar modelos de IA en tiempo de ejecución.
+- No implementar física avanzada ni navegación compleja.
+- Evitar dependencias innecesarias.
+- No utilizar gráficos 3D.
+- No construir una arquitectura excesiva para el alcance del proyecto.
+
+Diseñá el código para que sea fácil de modificar y ampliar mediante asistencia de IA.
+
+Si el repositorio ya contiene código, inspeccionalo antes de modificarlo y conservá lo que sea útil.
+
+---
+
+### 3. Dirección artística
+
+La referencia visual es el estilo general de los beat ’em ups arcade de los años 90, tomando como inspiración visual y de animación *Scott Pilgrim vs. the World: The Game* (2010).
+
+Utilizá esta referencia únicamente para orientar el lenguaje visual: ilustración 2D estilizada, personajes caricaturescos, siluetas reconocibles, animaciones expresivas, movimientos arcade y escenarios con personalidad. No copies personajes, sprites, escenarios, interfaces ni recursos gráficos protegidos del juego de referencia.
+
+**No utilizar pixel art.**
+
+La estética buscada debe combinar:
+- Ilustración 2D dibujada.
+- Personajes caricaturescos con proporciones estilizadas.
+- Contornos definidos.
+- Colores saturados y contrastados.
+- Animaciones cortas, expresivas y fluidas.
+- Efectos de impacto y destellos de cámara.
+- Interfaz arcade con puntuaciones, objetivos y avisos.
+- Escenarios con detalles suficientes para identificar inmediatamente el tipo de evento.
+
+El resultado debe parecer un videojuego arcade dibujado, no una aplicación con personajes geométricos genéricos.
+
+#### Paleta y ambientación
+
+Adaptá los colores a cada escenario. En los eventos formales utilizá iluminación más cálida y decoraciones elegantes; en los eventos nocturnos, incorporá neones, contrastes fuertes y efectos de iluminación.
+
+Los peligros deben distinguirse por su forma, animación y señalización, además de por el color.
+
+No llenes la pantalla de partículas o brillos que dificulten ver al jugador.
+
+---
+
+### 4. Perspectiva y movimiento
+
+Utilizá una perspectiva lateral con profundidad, característica de los beat ’em ups 2D.
+
+El escenario se observa desde un punto de vista ligeramente elevado. Los personajes se mueven por una superficie que permite desplazarse horizontalmente y también hacia el fondo y el primer plano.
+
+La cámara debe permanecer fija durante cada escenario. Toda la zona de juego debe resultar visible en pantalla, sin necesidad de desplazamiento de cámara.
+
+El movimiento debe permitir:
+- Caminar hacia la izquierda y la derecha.
+- Desplazarse hacia el fondo y hacia el frente.
+- Esquivar invitados.
+- Pasar entre mesas, sillas y otros obstáculos.
+- Acercarse a grupos de personas para fotografiarlos.
+- Evitar láseres y otros peligros.
+
+Implementá profundidad visual mediante la posición vertical de los personajes, el orden de dibujo y las capas del escenario. Los personajes que estén más cerca del frente deben poder aparecer delante de los objetos que correspondan.
+
+Utilizá colisiones sencillas basadas en la zona de los pies del personaje, no en la totalidad de su ilustración.
+
+El desplazamiento debe ser fluido y responder inmediatamente a los controles. No es necesario implementar saltos ni ataques físicos en el personaje principal, salvo que una mecánica futura lo justifique.
+
+Resolución lógica de referencia: 480 × 270 píxeles, con escalado que conserve la nitidez de los gráficos. La interfaz puede adaptarse a la ventana del navegador sin deformar el área de juego.
+
+---
+
+### 5. El fotógrafo protagonista
+
+El personaje principal debe ser reconocible inmediatamente en todos los escenarios.
+
+Características obligatorias:
+- Siempre viste de negro.
+- Tiene una cámara fotográfica claramente visible.
+- Su silueta debe diferenciarse de los invitados.
+- Su ropa no cambia según el evento.
+- Debe tener animaciones de caminar, estar quieto, fotografiar, recibir daño y celebrar una victoria.
+
+Puede llevar remera o camisa negra, pantalón negro y calzado oscuro. La cámara puede incorporar pequeños detalles claros para distinguirla de la vestimenta.
+
+La identidad visual debe permanecer consistente durante toda la campaña.
+
+No reemplaces al protagonista por personajes diferentes entre niveles. Es siempre el mismo fotógrafo.
+
+El personaje puede cambiar de orientación según su dirección de movimiento y la orientación del encuadre fotográfico.
+
+---
+
+### 6. Los invitados y su vestimenta
+
+Los invitados deben tener una apariencia distinta según el tipo de evento.
+
+No utilices el mismo conjunto de personajes con idéntica vestimenta en todos los escenarios.
+
+Cada evento debe incorporar:
+- Variaciones de vestimenta.
+- Diferentes siluetas y peinados.
+- Colores adecuados a la ambientación.
+- Animaciones de reposo y movimiento apropiadas.
+- Conductas sencillas que dificulten la circulación sin resultar injustas.
+
+Los invitados no deben parecer enemigos genéricos. Son personas que están participando del evento y que, involuntariamente, dificultan el trabajo del fotógrafo.
+
+En las zonas de comida, los invitados pueden permanecer sentados o desplazarse lentamente. En las pistas de baile, deben bailar, reunirse y moverse con mayor frecuencia.
+
+Implementá variaciones reutilizables de los personajes para no tener que crear un sprite completamente nuevo para cada invitado.
+
+---
+
+### 7. Los siete escenarios de la campaña
+
+La campaña principal debe tener seis eventos y un enfrentamiento final.
+
+Cada escenario es una pantalla fija independiente, con identidad visual propia, objetivos fotográficos específicos y dificultad creciente.
+
+#### Escenario 1: Evento religioso
+
+Ambientación:
+- Salón de ceremonia o espacio de celebración religiosa.
+- Bancos o sillas.
+- Altar o zona ceremonial.
+- Decoraciones y zonas de circulación.
+- Invitados con vestimenta formal.
+
+La dificultad inicial debe ser baja.
+
+El fotógrafo debe conseguir fotografías de la ceremonia y de los invitados, desplazándose sin bloquear el paso ni interrumpir momentos importantes.
+
+Los obstáculos son las filas de asientos, los invitados y las zonas restringidas.
+
+No introduzcas láseres de discoteca en este escenario. La dificultad debe provenir del movimiento, del espacio disponible y de los objetivos fotográficos.
+
+El objetivo es enseñar los controles y el sistema de fotografía.
+
+#### Escenario 2: Cumpleaños infantil
+
+Ambientación:
+- Salón infantil.
+- Globos, guirnaldas y decoración temática.
+- Mesas con comida y torta.
+- Invitados adultos y niños.
+- Regalos, juguetes y elementos de fiesta.
+
+Los niños se mueven de manera impredecible y pueden cruzarse en el camino del fotógrafo.
+
+Algunos invitados permanecen comiendo, mientras otros se desplazan o juegan.
+
+Objetivos posibles:
+- Fotografiar al cumpleañero.
+- Conseguir fotografías grupales.
+- Capturar el momento de la torta.
+- Fotografiar a los invitados.
+
+El escenario debe introducir obstáculos móviles más impredecibles que en el primero.
+
+#### Escenario 3: Cumpleaños de 15
+
+Ambientación:
+- Salón de fiestas elegante.
+- Mesa principal.
+- Decoraciones formales.
+- Invitados con vestidos de fiesta y trajes.
+- Pista de baile.
+- Luces de escenario.
+
+El objetivo consiste en conseguir las fotografías principales del evento.
+
+Incluí momentos fotográficos especiales, como la entrada de la quinceañera, las fotos grupales y el baile.
+
+La cantidad de invitados y el movimiento deben ser mayores que en los escenarios anteriores.
+
+Las luces de escenario pueden producir zonas de iluminación intensa, pero no deben introducir todavía una complejidad de láseres excesiva.
+
+#### Escenario 4: Boda
+
+Ambientación:
+- Salón de bodas.
+- Mesas formales.
+- Decoración floral.
+- Invitados con vestimenta elegante.
+- Pista de baile y zona de novios.
+
+Los objetivos incluyen fotografiar a los novios, conseguir fotografías grupales y capturar momentos importantes de la celebración.
+
+La circulación es más complicada debido a las mesas y a la concentración de invitados.
+
+Algunos momentos requieren rapidez: el fotógrafo debe ubicarse a tiempo para conseguir una fotografía destacada.
+
+Introducí desafíos de posicionamiento y encuadre, además de una mayor densidad de personas.
+
+#### Escenario 5: Discoteca
+
+Ambientación:
+- Pista de baile.
+- DJ.
+- Parlantes.
+- Luces móviles.
+- Mesas y zonas de descanso.
+- Invitados bailando.
+- Láseres y efectos de iluminación.
+
+Este escenario marca el cambio principal del juego.
+
+La fiesta comienza tranquila, con algunos invitados en la pista y otros descansando o consumiendo bebidas.
+
+Después aumenta la cantidad de gente. La pista se congestiona, las luces se intensifican y el DJ comienza a activar patrones de láseres.
+
+Los láseres deben:
+- Mostrar una advertencia antes de activarse.
+- Tener trayectorias legibles.
+- Permanecer activos durante un intervalo definido.
+- Dejar períodos de descanso.
+- Causar daño si alcanzan al jugador sin protección.
+
+Implementá inicialmente:
+1. Barrido horizontal.
+2. Barrido vertical.
+3. Haces diagonales.
+4. Un patrón combinado para una dificultad mayor.
+
+El fotógrafo debe continuar cumpliendo sus objetivos mientras esquiva los peligros y encuentra espacios para fotografiar.
+
+#### Escenario 6: Recital
+
+Ambientación:
+- Escenario musical.
+- Artistas o músicos.
+- Amplificadores y parlantes.
+- Público numeroso.
+- Iluminación de concierto.
+- Barreras de seguridad y zonas de acceso limitado.
+
+Los invitados se concentran cerca del escenario y se desplazan entre sectores.
+
+El fotógrafo debe conseguir imágenes de los artistas y del público.
+
+Los desafíos pueden incluir:
+- Capturar al artista durante un momento concreto.
+- Fotografiar al público sin quedar atrapado.
+- Evitar zonas iluminadas por haces peligrosos.
+- Encontrar espacios de circulación entre grupos.
+- Completar objetivos bajo presión.
+
+Utilizá iluminación y haces escénicos que aumenten la complejidad, sin convertir cada elemento luminoso en un peligro.
+
+La dificultad debe ser superior a la discoteca por la densidad del público, el espacio restringido y los patrones más exigentes.
+
+#### Escenario final: Pelea contra el DJ
+
+El último escenario es un enfrentamiento contra el DJ, que se convierte en el jefe final.
+
+La arena debe ser una pista de discoteca con el DJ en una posición reconocible, el equipo de sonido y el sistema de iluminación.
+
+El DJ debe tener:
+- Una ilustración y silueta propias.
+- Animaciones de preparación y ataque.
+- Una barra de salud o indicador de fases.
+- Patrones de láseres más complejos que los anteriores.
+
+El objetivo no debe consistir solamente en esquivar.
+
+El fotógrafo tiene que conseguir fotografías del DJ durante momentos vulnerables, aprovechar los períodos de descanso y encontrar oportunidades para sabotear el sistema de luces.
+
+Estructurá el combate en tres fases:
+
+**Fase 1: espectáculo**
+
+El DJ activa patrones básicos de láseres. El jugador debe esquivar y fotografiarlo.
+
+**Fase 2: caos**
+
+El DJ combina varios patrones, la pista se llena de obstáculos y las ventanas para fotografiarlo son más cortas.
+
+**Fase 3: desenlace**
+
+El DJ queda vulnerable después de una secuencia de ataques. El jugador debe aprovechar esa oportunidad para conseguir una fotografía final o alcanzar el mecanismo de desconexión.
+
+La victoria puede producirse al completar una secuencia de fotografías del jefe y desconectar el sistema de luces.
+
+La pelea debe reutilizar los sistemas de movimiento, fotografía, colisiones y láseres existentes. No desarrolles un motor de combate separado innecesariamente complejo.
+
+---
+
+### 8. Sistema de fotografía
+
+La fotografía es el objetivo principal del jugador y debe integrarse en todas las etapas.
+
+Controles iniciales:
+- WASD o flechas: movimiento.
+- Espacio: tomar fotografía.
+- E: interactuar con objetos.
+- Escape: pausar.
+
+Al tomar una fotografía:
+- Mostrar brevemente el visor de la cámara.
+- Ejecutar un flash.
+- Detectar a los sujetos incluidos en el encuadre.
+- Calcular una puntuación.
+- Actualizar el objetivo fotográfico.
+- Mostrar una indicación visual del resultado.
+- Aplicar un tiempo de recuperación breve.
+
+El encuadre puede ser un rectángulo situado delante del personaje, según su última dirección de movimiento.
+
+Las fotografías pueden recibir puntuación según:
+- Cantidad de sujetos.
+- Presencia del objetivo principal.
+- Distancia al sujeto.
+- Calidad aproximada del encuadre.
+- Cumplimiento de un objetivo especial.
+
+No es necesario simular ISO, diafragma, velocidad de obturación ni óptica real.
+
+El sistema debe premiar al jugador por arriesgarse a conseguir fotografías mejores, sin impedir que pueda completar los niveles con fotografías sencillas.
+
+Cada escenario debe tener una cantidad mínima de fotografías válidas y objetivos especiales opcionales.
+
+---
+
+### 9. Progresión y dificultad
+
+La dificultad debe aumentar gradualmente a lo largo de la campaña.
+
+Los primeros escenarios enseñan el movimiento y la fotografía. Los siguientes incorporan más invitados, espacios más congestionados, objetivos temporales y peligros ambientales.
+
+No introduzcas todas las mecánicas desde el principio.
+
+El juego debe comunicar con claridad cuándo aumenta el peligro.
+
+Utilizá valores configurables para:
+- Cantidad de invitados.
+- Velocidad de movimiento de los invitados.
+- Frecuencia de los patrones de láseres.
+- Duración de las advertencias.
+- Cantidad de fotografías requeridas.
+- Tiempo disponible para objetivos especiales.
+- Vidas o resistencia del fotógrafo.
+
+Cada nivel debe poder completarse sin depender de movimientos aleatorios imposibles de anticipar.
+
+---
+
+### 10. Mejoras roguelite
+
+Entre escenarios, ofrecé tres mejoras aleatorias y permití elegir una.
+
+Las mejoras se mantienen durante la partida actual y modifican la estrategia.
+
+Implementá inicialmente:
+
+**Cotillón protector**
+- Absorbe un impacto de láser.
+- Es un objeto consumible.
+
+**Bebida para el DJ**
+- Permite distraer al DJ.
+- Desactiva temporalmente los láseres o retrasa su siguiente ataque.
+
+**Flash mejorado**
+- Amplía el alcance del efecto fotográfico o aumenta las bonificaciones.
+
+**Gran angular**
+- Amplía el área del encuadre.
+
+**Zapatillas**
+- Aumentan la velocidad de movimiento.
+
+**Correa de cámara**
+- Reduce el tiempo de recuperación entre fotografías.
+
+Los objetos consumibles pueden aparecer en el escenario y recogerse al acercarse o interactuar.
+
+No implementes inventarios complejos, árboles de habilidades extensos ni progresión permanente entre partidas en la primera versión.
+
+---
+
+### 11. Interfaz y presentación
+
+La interfaz debe conservar la estética arcade dibujada.
+
+Durante la partida, mostrale al jugador:
+- Escenario actual.
+- Cantidad de fotografías válidas y objetivo.
+- Vidas o resistencia.
+- Tiempo restante, cuando corresponda.
+- Fase actual del evento.
+- Indicaciones de peligro.
+- Objeto disponible o equipado.
+
+Creá las siguientes pantallas:
+- Menú principal.
+- Selección o introducción del escenario.
+- Partida.
+- Selección de mejoras.
+- Pausa.
+- Derrota.
+- Victoria.
+
+Cada escenario debe tener una breve introducción que indique el tipo de evento y los objetivos principales.
+
+Al finalizar cada nivel, mostrá las estadísticas y permití continuar.
+
+No llenes la pantalla de paneles. La zona de juego, los invitados y el fotógrafo deben seguir siendo los elementos principales.
+
+---
+
+### 12. Audio
+
+El audio debe ser liviano y local.
+
+Utilizá efectos cortos para:
+- Disparo de la cámara.
+- Obtención de una fotografía válida.
+- Fotografía destacada.
+- Advertencia de láser.
+- Impacto.
+- Recogida de objetos.
+- Interacción con el DJ.
+- Victoria y derrota.
+
+La música puede variar según el escenario, pero no debe ser necesaria para el funcionamiento de las mecánicas.
+
+No dependas de servicios externos ni de archivos descargados en tiempo de ejecución.
+
+Incluí controles para silenciar la música y los efectos.
+
+---
+
+### 13. Arquitectura
+
+Separá el proyecto en módulos pequeños con responsabilidades claras.
+
+Como mínimo:
+- Configuración del juego.
+- Escena del menú.
+- Escena de juego.
+- Control del jugador.
+- Animaciones del protagonista.
+- Gestión de invitados.
+- Sistema de fotografía.
+- Sistema de colisiones.
+- Sistema de láseres.
+- Gestión de objetos y mejoras.
+- Configuración de escenarios.
+- Progresión de campaña.
+- Jefe final.
+- Interfaz y estados de partida.
+
+Cada escenario debe construirse a partir de una configuración reutilizable que defina:
+- Fondo y decoración.
+- Conjunto de personajes.
+- Vestimenta y variaciones.
+- Densidad de invitados.
+- Objetivos fotográficos.
+- Obstáculos.
+- Peligros habilitados.
+- Dificultad.
+
+Esto debe permitir crear o ajustar escenarios sin duplicar la lógica principal.
+
+Centralizá las constantes de movimiento, puntuación, dificultad y tiempos para facilitar el balance.
+
+---
+
+### 14. Plan de desarrollo
+
+Implementá el proyecto por etapas.
+
+**Etapa 1: prototipo jugable**
+- Crear el proyecto Phaser.
+- Implementar el movimiento en dos ejes sobre un escenario fijo.
+- Crear al fotógrafo con vestimenta negra y cámara visible.
+- Implementar obstáculos y colisiones.
+- Crear invitados básicos.
+- Implementar el sistema fotográfico.
+- Crear un objetivo de nivel y condiciones de victoria y derrota.
+
+**Etapa 2: identidad visual**
+- Definir el estilo ilustrado.
+- Crear el escenario inicial.
+- Crear variaciones de invitados.
+- Implementar animaciones.
+- Crear interfaz arcade.
+
+**Etapa 3: campaña**
+*Menu de comienzo de partida.
+- El usuario puede seleccionar nombre del fotógrafo, y si es hombre o mujer. 
+- El usuario puede seleccionar si sacar el sonidos
+- El usuario da start para comenzar.
+- El menú muestar en un lateral una ilustracion con los controles y que hace cada uno
+- Implementar los seis eventos.
+- Asignar vestimenta, decoración, objetivos y dificultad a cada uno.
+- Crear las transiciones entre escenarios.
+
+**Etapa 4: peligros y mejoras**
+- Implementar los láseres.
+- Incorporar advertencias y colisiones.
+- Crear los objetos y las mejoras roguelite.
+- Ajustar la dificultad.
+
+**Etapa 5: jefe final**
+- Implementar las tres fases del DJ.
+- Reutilizar las mecánicas existentes.
+- Crear la secuencia de victoria y el desenlace.
+
+**Etapa 6: pruebas y publicación**
+- Verificar los siete escenarios.
+- Corregir errores de colisión y progresión.
+- Ajustar el rendimiento.
+- Verificar el escalado de pantalla.
+- Documentar la instalación, el desarrollo y la compilación.
+
+Al terminar cada etapa, ejecutá las verificaciones disponibles y corregí los problemas antes de continuar.
+
+---
+
+### 15. Criterios de aceptación
+
+El juego se considera terminado cuando:
+
+1. El protagonista es claramente identificable y siempre viste de negro con su cámara visible.
+2. La perspectiva es lateral con profundidad y la cámara permanece fija.
+3. El jugador puede moverse en dos ejes, fotografiar y esquivar invitados.
+4. Las fotografías cuentan para objetivos concretos.
+5. Los invitados tienen comportamientos y vestimentas adecuados a cada evento.
+6. Los seis escenarios principales son visualmente diferenciables.
+7. Los peligros se introducen progresivamente.
+8. Los láseres tienen advertencias claras.
+9. Las mejoras funcionan y pueden seleccionarse entre niveles.
+10. El enfrentamiento contra el DJ tiene fases diferenciadas.
+11. La campaña tiene un principio, una progresión y un final.
+12. Las pantallas de victoria y derrota funcionan correctamente.
+13. El proyecto compila y se ejecuta en navegador sin depender de un backend.
+14. Los gráficos y las animaciones mantienen una dirección artística coherente.
+
+---
+
+### 16. Forma de trabajo con el repositorio
+
+Primero, inspeccioná el repositorio actual, identificá la estructura existente y detectá las herramientas disponibles.
+
+Después:
+1. Presentá un plan de implementación breve.
+3. Implementá la primera etapa jugable.
+4. Ejecutá las verificaciones disponibles.
+5. Corregí errores.
+6. Continuá por etapas, manteniendo el proyecto ejecutable.
+7. Documentá cómo ejecutar y compilar el juego.
+
+No intentes implementar todos los escenarios y sistemas simultáneamente si eso compromete la calidad del código o impide verificar el resultado.
+
+Si algún recurso gráfico no está disponible, utilizá una alternativa temporal coherente, pero mantené el código preparado para sustituirla.
+
+No afirmes que una mecánica está terminada sin haberla implementado y verificado.
+
+**Prioridad absoluta: terminar un juego pequeño, coherente y divertido antes de ampliar su contenido.**
