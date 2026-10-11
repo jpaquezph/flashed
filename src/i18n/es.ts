@@ -3,6 +3,7 @@ export const es: Record<string, string> = {
 
   'menu.tagline': '¡Que los láseres no te quemen el sensor!',
   'menu.start': 'ESPACIO o ENTER: EMPEZAR',
+  'menu.credit': 'Un juego hecho por jpaquez',
   'menu.levels': 'ELEGIR EVENTO',
   'levels.title': 'ELEGÍ EL EVENTO',
   'levels.hint': '← →: elegir   ·   ESPACIO o ENTER: jugar   ·   ESC: volver',

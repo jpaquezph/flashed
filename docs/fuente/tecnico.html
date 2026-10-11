@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>FLASHED — Documento técnico</title>
+<style>
+  @page { size: A4; margin: 17mm 16mm 18mm; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; line-height: 1.45; color: #1b1c22; margin: 0; }
+  h1 { font-size: 30pt; margin: 0; font-style: italic; font-weight: 900; letter-spacing: -0.5px; }
+  h2 { font-size: 15pt; margin: 0 0 8px; padding-bottom: 5px; border-bottom: 2.5px solid #ff8a2f; break-after: avoid; }
+  h3 { font-size: 11pt; margin: 14px 0 5px; color: #26262c; break-after: avoid; }
+  p { margin: 0 0 7px; }
+  section { margin-bottom: 20px; }
+  .cover { background: #12141f; color: #fff; padding: 26px 28px 24px; border-radius: 8px; margin-bottom: 20px; }
+  .cover .sub { color: #ff8a2f; font-weight: 700; font-size: 12pt; margin-top: 4px; }
+  .cover table { margin-top: 16px; font-size: 9pt; color: #c9cdd6; border: 0; width: auto; }
+  .cover td { border: 0; padding: 1px 18px 1px 0; background: none; }
+  .cover td:first-child { color: #8d93a3; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9pt; }
+  th { background: #26262c; color: #fff; text-align: left; padding: 5px 7px; font-weight: 600; }
+  td { border-bottom: 1px solid #dcdde3; padding: 4.5px 7px; vertical-align: top; }
+  tr { break-inside: avoid; }
+  td.id { font-family: Consolas, monospace; font-size: 8.5pt; color: #b85a12; white-space: nowrap; width: 54px; }
+  code { font-family: Consolas, monospace; font-size: 8.8pt; background: #f0f0f4; padding: 0 3px; border-radius: 3px; }
+  ul { margin: 4px 0 8px; padding-left: 18px; }
+  li { margin-bottom: 2.5px; }
+  .note { background: #fff5ea; border-left: 3.5px solid #ff8a2f; padding: 7px 10px; font-size: 9pt; margin: 8px 0; break-inside: avoid; }
+  .fig { break-inside: avoid; margin: 8px 0 4px; }
+  .fig svg { width: 100%; height: auto; display: block; }
+  .cap { font-size: 8.3pt; color: #6a6c78; text-align: center; margin-top: 3px; }
+  .two { columns: 2; column-gap: 22px; }
+  .break { break-before: page; }
+  svg text { font-family: "Segoe UI", Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>FLASHED</h1>
+  <div class="sub">Documento técnico: requisitos, requerimientos y arquitectura</div>
+  <table>
+    <tr><td>Producto</td><td>Juego arcade 2D para navegador</td></tr>
+    <tr><td>Versión</td><td>0.1.0 · 10 de octubre de 2026</td></tr>
+    <tr><td>Tecnología</td><td>Phaser 3 · TypeScript · Vite · Web Audio</td></tr>
+    <tr><td>Repositorio</td><td>github.com/jpaquezph/flashed (privado, rama main)</td></tr>
+  </table>
+</div>
+
+<section>
+<h2>1. Resumen</h2>
+<p>FLASHED es un juego arcade de un solo jugador que corre completo en el navegador, sin servidor ni cuentas. El jugador es un fotógrafo de eventos que tiene que cumplir los objetivos de cada fiesta mientras esquiva los láseres del DJ, que le queman el sensor de la cámara. La campaña tiene seis eventos y una pelea final contra el DJ.</p>
+<p>Todo el contenido se genera en el momento de cargar: los gráficos son SVG armados por código y el sonido se sintetiza con Web Audio. El paquete publicado es un único archivo JavaScript más una página HTML; no hay imágenes, fuentes ni archivos de audio que descargar.</p>
+</section>
+
+<section>
+<h2>2. Requisitos</h2>
+<h3>2.1 Para jugar</h3>
+<table>
+  <tr><th style="width:150px">Elemento</th><th>Requisito</th></tr>
+  <tr><td>Navegador</td><td>Uno actual con ES2020, WebGL (o Canvas 2D con <code>?canvas</code>), Web Audio, Pointer Events y SVG como imagen: Chrome, Edge, Firefox o Safari recientes.</td></tr>
+  <tr><td>Conexión</td><td>Solo para la carga inicial (≈1,67 MB, ≈394 KB comprimido con gzip). Después no hace pedidos de red.</td></tr>
+  <tr><td>Entrada</td><td>Teclado, pantalla táctil, mando estándar o control remoto con flechas, Enter y 0.</td></tr>
+  <tr><td>Pantalla</td><td>Cualquier tamaño; el juego conserva la proporción 16:9. En teléfonos y tabletas se juega en horizontal.</td></tr>
+  <tr><td>Almacenamiento</td><td>Opcional: <code>localStorage</code> para recordar idioma y sonido. Sin él, el juego funciona igual.</td></tr>
+</table>
+<h3>2.2 Para desarrollar y publicar</h3>
+<table>
+  <tr><th style="width:150px">Elemento</th><th>Requisito</th></tr>
+  <tr><td>Node.js y npm</td><td>Node 20 o superior (desarrollado con Node 24).</td></tr>
+  <tr><td>Dependencias</td><td><code>phaser ^3.90</code> en ejecución; <code>typescript ^5.6</code> y <code>vite ^6</code> para compilar.</td></tr>
+  <tr><td>Comandos</td><td><code>npm install</code> · <code>npm run dev</code> (desarrollo) · <code>npm run build</code> (verifica tipos y genera <code>dist/</code>) · <code>npm run preview</code> (sirve <code>dist/</code>).</td></tr>
+  <tr><td>Hosting</td><td>Cualquier hosting de archivos estáticos. La ruta base es relativa (<code>base: './'</code>), así que funciona en una subcarpeta. Para pantalla completa y orientación en teléfonos conviene HTTPS.</td></tr>
+</table>
+</section>
+
+<section class="break">
+<h2>3. Requerimientos funcionales</h2>
+<table>
+  <tr><th>ID</th><th>Requerimiento</th></tr>
+  <tr><td class="id">RF-01</td><td><b>Campaña.</b> Siete escenarios encadenados: Noche de alabanza, Cumpleaños infantil, Cumpleaños de 15, Boda, Discoteca, Recital y Contra el DJ. Al ganar uno se pasa al siguiente.</td></tr>
+  <tr><td class="id">RF-02</td><td><b>Movimiento.</b> El fotógrafo se mueve en ocho direcciones sobre el piso, choca con muebles y no atraviesa a los invitados.</td></tr>
+  <tr><td class="id">RF-03</td><td><b>Fotografía.</b> Cada disparo evalúa quién quedó dentro del encuadre que se ve en el piso. La foto vale según cantidad de personas, protagonistas y repetición; hay una espera corta entre fotos.</td></tr>
+  <tr><td class="id">RF-04</td><td><b>Objetivos obligatorios.</b> Cada evento tiene un mínimo de fotos válidas y tres objetivos (momentos del evento, personas puntuales, foto grupal). Para salir hay que cumplir todo.</td></tr>
+  <tr><td class="id">RF-05</td><td><b>Momentos.</b> Los momentos del evento (la torta, el vals, el solo) ocurren a los pocos segundos de empezar y, si su objetivo queda pendiente, se repiten.</td></tr>
+  <tr><td class="id">RF-06</td><td><b>Tarjeta de memoria.</b> 10 disparos por evento (30 en la pelea final). Si se llena con objetivos pendientes, se pierde, con una animación propia.</td></tr>
+  <tr><td class="id">RF-07</td><td><b>Láseres.</b> Barridos horizontales, verticales, diagonales y combinados, con aviso previo y un corredor seguro. Cada impacto quema una parte del sensor; sin sensor se pierde.</td></tr>
+  <tr><td class="id">RF-08</td><td><b>Flash al iluminador.</b> En los eventos comunes, fotografiar a quien maneja las luces con los láseres prendidos los apaga un momento, al costo de un disparo.</td></tr>
+  <tr><td class="id">RF-09</td><td><b>Salida.</b> Con todo cumplido, la puerta se ilumina y se sale con la tecla de interactuar. Si se acaba el tiempo antes, se pierde.</td></tr>
+  <tr><td class="id">RF-10</td><td><b>Dificultad creciente.</b> De un evento al siguiente los láseres descansan menos y barren más rápido, hay menos tiempo y más invitados en movimiento.</td></tr>
+  <tr><td class="id">RF-11</td><td><b>Jefe final.</b> Pelea con dos barras de vida. Las fotos le sacan vida al DJ (el doble de cerca). Tres fases: en la segunda se mueve detrás de la cabina; en la tercera baja a la pista y persigue al jugador para pegarle.</td></tr>
+  <tr><td class="id">RF-12</td><td><b>Accesorios.</b> Al ganar un evento se elige uno entre tres al azar, de siete posibles, que dura toda la partida.</td></tr>
+  <tr><td class="id">RF-13</td><td><b>Cinemáticas.</b> Una inicial antes del primer evento y una final después del jefe, con globos de diálogo, voz en código morse y opción de saltarlas.</td></tr>
+  <tr><td class="id">RF-14</td><td><b>Menú y selección de evento.</b> Menú con controles, idioma, efectos y música; pantalla para elegir cualquier evento.</td></tr>
+  <tr><td class="id">RF-15</td><td><b>Interfaz de partida.</b> Evento y fase, contador de fotos, tarjeta, sensor, tiempo, objetivos siempre visibles, avisos y pausa.</td></tr>
+  <tr><td class="id">RF-16</td><td><b>Resultados.</b> Pantalla de victoria con puntaje y bonus, o de derrota con el motivo y opción de reintentar.</td></tr>
+  <tr><td class="id">RF-17</td><td><b>Idiomas.</b> Español e inglés, intercambiables desde el menú.</td></tr>
+  <tr><td class="id">RF-18</td><td><b>Sonido.</b> Una pista musical de género distinto por escenario, música de victoria y de derrota, y efectos. Música y efectos se pueden apagar por separado desde el menú, la partida y la pausa.</td></tr>
+  <tr><td class="id">RF-19</td><td><b>Teclado y mouse.</b> Todo el juego se maneja con teclado; los botones del menú también responden al mouse.</td></tr>
+  <tr><td class="id">RF-20</td><td><b>Pantalla táctil.</b> Palanca virtual, botones de foto, interactuar y pausa, y todas las pantallas responden al toque. En vertical se pide girar el dispositivo.</td></tr>
+  <tr><td class="id">RF-21</td><td><b>Mando y control remoto.</b> Mando estándar en todas las pantallas; con control remoto, las flechas mueven, Enter dispara y 0 interactúa.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>4. Requerimientos no funcionales</h2>
+<table>
+  <tr><th>ID</th><th>Requerimiento</th></tr>
+  <tr><td class="id">RNF-01</td><td><b>Sin backend.</b> No hay servidor, base de datos, cuentas ni telemetría. El juego no envía datos.</td></tr>
+  <tr><td class="id">RNF-02</td><td><b>Sin recursos externos.</b> Gráficos y sonido se generan en el navegador; el paquete es un solo archivo JavaScript.</td></tr>
+  <tr><td class="id">RNF-03</td><td><b>Adaptación de pantalla.</b> Resolución lógica fija de 480 × 270, escalada y centrada conservando 16:9. Se reajusta sola al girar el dispositivo o cambiar el tamaño de la ventana.</td></tr>
+  <tr><td class="id">RNF-04</td><td><b>Nitidez y memoria.</b> El arte vectorial se rasteriza a 4× en computadoras y tabletas (lienzo de 1920 × 1080) y a 3× en teléfonos (1440 × 810).</td></tr>
+  <tr><td class="id">RNF-05</td><td><b>Uso de memoria.</b> Los personajes de cada evento se generan al entrar y se descartan al pasar al siguiente.</td></tr>
+  <tr><td class="id">RNF-06</td><td><b>Configurable por datos.</b> Cada escenario es un objeto de configuración; el balance general vive en un archivo de constantes. Agregar un evento no requiere tocar la lógica.</td></tr>
+  <tr><td class="id">RNF-07</td><td><b>Calidad de código.</b> TypeScript en modo estricto, sin variables ni parámetros sin usar. La compilación falla si la verificación de tipos falla.</td></tr>
+  <tr><td class="id">RNF-08</td><td><b>Tolerancia.</b> Sin <code>localStorage</code> o sin audio el juego sigue funcionando. Si la pestaña pasa a segundo plano, la música se retoma sin acumular notas.</td></tr>
+  <tr><td class="id">RNF-09</td><td><b>Variedad visual.</b> En una misma escena ningún personaje genérico aparece más de dos veces.</td></tr>
+  <tr><td class="id">RNF-10</td><td><b>Legibilidad.</b> Los peligros siempre se avisan antes de activarse y el jugador se distingue con una marca propia.</td></tr>
+</table>
+</section>
+
+<section class="break">
+<h2>5. Arquitectura</h2>
+<p>El código está en <code>src/</code> (unas 6.900 líneas de TypeScript). Se organiza en capas: las <b>escenas</b> deciden qué se muestra, los <b>sistemas de juego</b> contienen las reglas, la <b>configuración</b> describe cada evento, y los módulos de <b>arte</b>, <b>audio</b>, <b>textos</b> y <b>dispositivo</b> dan servicio a todo lo demás.</p>
+
+<div class="fig">
+<svg viewBox="0 0 760 392" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#55565f"/></marker></defs>
+  <g font-size="11" fill="#fff" font-weight="600">
+    <rect x="290" y="6" width="180" height="34" rx="6" fill="#12141f"/><text x="380" y="27" text-anchor="middle">main.ts · arranque de Phaser</text>
+    <rect x="20" y="78" width="720" height="62" rx="8" fill="#ff8a2f"/>
+    <text x="34" y="96" fill="#12141f">ESCENAS (src/scenes)</text>
+    <g font-weight="400" font-size="10" fill="#12141f">
+      <text x="34" y="115">Boot · Menu · Levels · Prologue · Intro · Game · Result · Upgrade · Ending</text>
+      <text x="34" y="130">Cada una arma su pantalla, escucha la entrada y decide a qué escena se pasa.</text>
+    </g>
+    <rect x="20" y="178" width="350" height="92" rx="8" fill="#26262c"/>
+    <text x="34" y="196">SISTEMAS DE JUEGO (src/game)</text>
+    <g font-weight="400" font-size="10" fill="#dcdde3">
+      <text x="34" y="214">Player · Guests · PhotoSystem · LaserSystem</text>
+      <text x="34" y="229">Hud · Collision · TouchControls</text>
+      <text x="34" y="244">Campaign (estado de la partida) · Upgrades</text>
+      <text x="34" y="259">Los usa GameScene; no conocen a las demás escenas.</text>
+    </g>
+    <rect x="390" y="178" width="350" height="92" rx="8" fill="#26262c"/>
+    <text x="404" y="196">CONFIGURACIÓN (src/config)</text>
+    <g font-weight="400" font-size="10" fill="#dcdde3">
+      <text x="404" y="214">constants.ts: balance, tamaños, colores</text>
+      <text x="404" y="229">scenarios/: un archivo por evento (ScenarioConfig)</text>
+      <text x="404" y="244">scenarios/index.ts: orden de la campaña</text>
+      <text x="404" y="259">Datos puros: los leen escenas y sistemas.</text>
+    </g>
+    <rect x="20" y="304" width="170" height="80" rx="8" fill="#3b6fe0"/>
+    <text x="32" y="322">ARTE (src/art)</text>
+    <g font-weight="400" font-size="9.5"><text x="32" y="339">SVG por código →</text><text x="32" y="352">texturas de Phaser.</text><text x="32" y="365">Personajes, fondos,</text><text x="32" y="378">utilería, interfaz.</text></g>
+    <rect x="203" y="304" width="170" height="80" rx="8" fill="#3b6fe0"/>
+    <text x="215" y="322">AUDIO (src/audio)</text>
+    <g font-weight="400" font-size="9.5"><text x="215" y="339">Music: secuenciador</text><text x="215" y="352">por pasos.</text><text x="215" y="365">Sfx: efectos y voz.</text><text x="215" y="378">Un AudioContext común.</text></g>
+    <rect x="386" y="304" width="170" height="80" rx="8" fill="#3b6fe0"/>
+    <text x="398" y="322">TEXTOS (src/i18n)</text>
+    <g font-weight="400" font-size="9.5"><text x="398" y="339">Diccionarios es / en.</text><text x="398" y="352">t(clave) elige idioma</text><text x="398" y="365">y variante táctil.</text><text x="398" y="378">settings.ts: preferencias.</text></g>
+    <rect x="570" y="304" width="170" height="80" rx="8" fill="#3b6fe0"/>
+    <text x="582" y="322">DISPOSITIVO</text>
+    <g font-weight="400" font-size="9.5"><text x="582" y="339">device.ts: táctil, tableta,</text><text x="582" y="352">pantalla completa.</text><text x="582" y="365">gamepad.ts: mando → teclas.</text><text x="582" y="378">ui/widgets.ts: piezas de UI.</text></g>
+  </g>
+  <g stroke="#55565f" stroke-width="1.6" fill="none" marker-end="url(#a)">
+    <path d="M380,40 V76"/><path d="M195,140 V176"/><path d="M565,140 V176"/><path d="M370,224 H388"/>
+    <path d="M105,270 V302"/><path d="M288,270 V302"/><path d="M471,270 V302"/><path d="M655,270 V302"/>
+  </g>
+</svg>
+<div class="cap">Figura 1. Capas del proyecto. Las flechas indican quién usa a quién.</div>
+</div>
+
+<h3>5.1 Recorrido de pantallas</h3>
+<div class="fig">
+<svg viewBox="0 0 760 196" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#55565f"/></marker></defs>
+  <g font-size="10.5" font-weight="600" text-anchor="middle">
+    <g fill="#26262c"><rect x="8" y="70" width="66" height="32" rx="6"/><rect x="98" y="70" width="70" height="32" rx="6"/><rect x="98" y="10" width="70" height="32" rx="6"/><rect x="196" y="70" width="80" height="32" rx="6"/><rect x="304" y="70" width="76" height="32" rx="6"/><rect x="528" y="70" width="80" height="32" rx="6"/><rect x="528" y="150" width="80" height="32" rx="6"/><rect x="528" y="10" width="80" height="32" rx="6"/></g>
+    <rect x="408" y="62" width="92" height="48" rx="6" fill="#ff8a2f"/>
+    <rect x="660" y="70" width="92" height="32" rx="6" fill="#12141f"/>
+    <g fill="#fff"><text x="41" y="90">Boot</text><text x="133" y="90">Menu</text><text x="133" y="30">Levels</text><text x="236" y="90">Prologue</text><text x="342" y="90">Intro</text><text x="568" y="90">Result</text><text x="568" y="170">Upgrade</text><text x="568" y="30">Ending</text><text x="706" y="90">Menu</text></g>
+    <text x="454" y="84" fill="#12141f">Game</text><text x="454" y="98" fill="#12141f" font-weight="400" font-size="9">partida</text>
+  </g>
+  <g stroke="#55565f" stroke-width="1.5" fill="none" marker-end="url(#b)">
+    <path d="M74,86 H96"/><path d="M168,86 H194"/><path d="M276,86 H302"/><path d="M380,86 H406"/><path d="M500,86 H526"/>
+    <path d="M133,70 V44"/><path d="M168,26 H342 V68"/>
+    <path d="M454,62 V26 H526"/><path d="M568,42 V68"/>
+    <path d="M568,102 V148"/><path d="M528,166 H342 V104"/>
+    <path d="M608,86 H658"/><path d="M548,102 Q500,140 462,112"/>
+  </g>
+  <g font-size="8.6" fill="#6a6c78">
+    <text x="176" y="20">evento elegido</text><text x="462" y="20">jefe vencido</text><text x="612" y="130">ganó y hay más</text><text x="350" y="160">siguiente evento</text><text x="610" y="78">fin o salir</text><text x="456" y="140">reintentar</text>
+  </g>
+</svg>
+<div class="cap">Figura 2. Flujo entre escenas. La cinemática inicial (Prologue) solo aparece antes del primer evento.</div>
+</div>
+
+<h3>5.2 Cómo se conecta una partida</h3>
+<p><code>GameScene</code> es el coordinador. Al crearse lee la configuración del evento en curso (<code>Campaign.currentScenario()</code>) y arma con ella los sistemas. En cada cuadro:</p>
+<ul>
+  <li>Junta la entrada de <b>teclado</b>, <b>TouchControls</b> y, traducida a teclas, del <b>mando</b>.</li>
+  <li>Avanza los <b>momentos</b> del evento y les indica a los actores qué hacer a través de <b>GuestManager</b>.</li>
+  <li>Mueve al <b>Player</b> contra los obstáculos (<b>Collision</b>) y a los invitados.</li>
+  <li>Actualiza el <b>LaserSystem</b>; si un haz toca al jugador, descuenta sensor en <b>Campaign</b>.</li>
+  <li>Al disparar, pide a <b>PhotoSystem</b> el encuadre y el puntaje, y marca objetivos cumplidos.</li>
+  <li>Le pasa el estado completo al <b>Hud</b>, que solo dibuja.</li>
+</ul>
+<p>El estado que sobrevive entre eventos (índice, puntaje, accesorios, sensor) está en un único objeto <code>run</code> dentro de <code>Campaign.ts</code>. Los accesorios modifican los multiplicadores de <code>run.stats</code>, que el jugador y la fotografía consultan.</p>
+
+<h3>5.3 Arte generado por código</h3>
+<p>Cada textura se describe como una cadena SVG. <code>art/index.ts</code> la convierte en imagen y la registra en Phaser. Los personajes salen de un único generador (<code>art/character.ts</code>): un <i>look</i> (piel, pelo, ropa, accesorios) más un conjunto de poses produce un spritesheet de 15 cuadros. Fondos, utilería e interfaz se generan una vez en el arranque; los personajes, por evento.</p>
+
+<h3>5.4 Audio</h3>
+<p><code>Music.ts</code> es un secuenciador por pasos: cada pista define compás, acordes, batería y voces con su instrumento sintetizado (órgano, cajita de música, bajo 808, cuerdas, guitarra distorsionada, etc.). <code>Sfx.ts</code> genera los efectos y la voz de los diálogos. Ambos comparten un <code>AudioContext</code> que se habilita con la primera interacción del usuario.</p>
+</section>
+
+<section class="break">
+<h2>6. Información técnica</h2>
+<h3>6.1 Configuración de los eventos</h3>
+<table>
+  <tr><th>#</th><th>Evento</th><th>Fotos mínimas</th><th>Tarjeta</th><th>Tiempo</th><th>Sensor</th><th>Maneja los láseres</th></tr>
+  <tr><td>1</td><td>Noche de alabanza</td><td>4</td><td>10</td><td>2:30</td><td>3</td><td>Iluminador</td></tr>
+  <tr><td>2</td><td>Cumpleaños infantil</td><td>4</td><td>10</td><td>2:25</td><td>3</td><td>Animador</td></tr>
+  <tr><td>3</td><td>Cumpleaños de 15</td><td>5</td><td>10</td><td>2:20</td><td>3</td><td>DJ</td></tr>
+  <tr><td>4</td><td>Boda</td><td>5</td><td>10</td><td>2:15</td><td>3</td><td>DJ</td></tr>
+  <tr><td>5</td><td>Discoteca</td><td>6</td><td>10</td><td>2:10</td><td>3</td><td>DJ</td></tr>
+  <tr><td>6</td><td>Recital</td><td>6</td><td>10</td><td>2:05</td><td>3</td><td>Técnico de luces</td></tr>
+  <tr><td>7</td><td>Contra el DJ</td><td>14 puntos de vida</td><td>30</td><td>3:00</td><td>5</td><td>DJ (jefe)</td></tr>
+</table>
+<p>Cada evento es un <code>ScenarioConfig</code> (<code>src/config/scenarios/types.ts</code>) con: fondo y música, utilería y zonas sólidas, invitados (vestuario, asientos, bailarines, quienes deambulan), actores con nombre, momentos, objetivos, láseres (emisores, zona, corredor seguro y tramos de dificultad) y, opcionalmente, un jefe.</p>
+
+<h3>6.2 Entradas</h3>
+<table>
+  <tr><th>Acción</th><th>Teclado</th><th>Táctil</th><th>Mando</th><th>Control remoto</th></tr>
+  <tr><td>Moverse</td><td>WASD o flechas</td><td>Palanca</td><td>Palanca o cruceta</td><td>Flechas</td></tr>
+  <tr><td>Sacar foto / aceptar</td><td>Espacio o Enter</td><td>Botón de cámara / toque</td><td>A</td><td>Enter</td></tr>
+  <tr><td>Interactuar (salir, usar objeto)</td><td>E o 0</td><td>Botón E</td><td>B o X</td><td>0</td></tr>
+  <tr><td>Pausa</td><td>Esc</td><td>Botón de pausa</td><td>Start</td><td>—</td></tr>
+  <tr><td>Efectos / música</td><td>M / N</td><td>Botones en la pausa y el menú</td><td>—</td><td>—</td></tr>
+</table>
+
+<h3>6.3 Datos guardados</h3>
+<p>Solo las preferencias, en <code>localStorage</code> bajo la clave <code>flashed.settings</code>: idioma, efectos y música. El progreso de la campaña no se guarda: vive en memoria y se reinicia al recargar.</p>
+
+<h3>6.4 Herramientas de prueba</h3>
+<table>
+  <tr><th style="width:190px">Recurso</th><th>Uso</th></tr>
+  <tr><td><code>?scene=Game&amp;level=N</code></td><td>Abre directamente el evento N. También <code>?scene=Prologue</code>, <code>Ending</code>, <code>Intro</code>, <code>Upgrade</code>.</td></tr>
+  <tr><td><code>?touch</code></td><td>Fuerza el modo táctil en una computadora (el mouse hace de dedo).</td></tr>
+  <tr><td><code>?canvas</code></td><td>Usa Canvas 2D en lugar de WebGL.</td></tr>
+  <tr><td><code>__flashed</code>, <code>__flashedRun()</code></td><td>Desde la consola: la instancia de Phaser y el estado de la partida.</td></tr>
+</table>
+
+<h3>6.5 Estructura de carpetas</h3>
+<table>
+  <tr><th style="width:190px">Ruta</th><th>Contenido</th></tr>
+  <tr><td><code>index.html</code></td><td>Página, estilos de pantalla completa y aviso de girar el dispositivo.</td></tr>
+  <tr><td><code>src/main.ts</code></td><td>Configuración de Phaser y registro de escenas.</td></tr>
+  <tr><td><code>src/scenes/</code></td><td>Una clase por pantalla; <code>Cutscenes.ts</code> contiene las dos cinemáticas.</td></tr>
+  <tr><td><code>src/game/</code></td><td>Reglas: jugador, invitados, fotografía, láseres, HUD, colisiones, controles táctiles, campaña, accesorios.</td></tr>
+  <tr><td><code>src/config/</code></td><td>Constantes de balance y un archivo por escenario.</td></tr>
+  <tr><td><code>src/art/</code></td><td>Generadores SVG: personajes, vestuarios, escenarios, menú, cinemáticas e íconos.</td></tr>
+  <tr><td><code>src/audio/</code></td><td>Música, efectos y contexto de audio.</td></tr>
+  <tr><td><code>src/i18n/</code>, <code>settings.ts</code></td><td>Textos en dos idiomas y preferencias.</td></tr>
+  <tr><td><code>src/device.ts</code>, <code>gamepad.ts</code></td><td>Detección táctil, pantalla completa, reajuste y mando.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>7. Estado de verificación y límites conocidos</h2>
+<h3>Verificado</h3>
+<ul>
+  <li>Verificación de tipos y compilación de producción sin errores.</li>
+  <li>Recorridos automáticos en un navegador sin interfaz: menú, selección, cinemáticas, los siete eventos, reglas de objetivos, tarjeta, láseres, jefe, accesorios y pantallas de resultado.</li>
+  <li>Pantallas emuladas de 667 × 375 a 3840 × 2160, con y sin entrada táctil, y mando simulado.</li>
+  <li>Dos teléfonos reales, probados por el autor del proyecto.</li>
+</ul>
+<h3>Pendiente o limitado</h3>
+<ul>
+  <li>Televisores, tabletas y mandos reales todavía no se probaron.</li>
+  <li>El balance de dificultad con las reglas actuales (10 disparos, objetivos obligatorios) no se jugó completo a mano.</li>
+  <li>El repositorio no incluye pruebas automáticas; los recorridos de verificación se hicieron con scripts externos.</li>
+  <li>En 4K el juego se amplía desde 1080p. En iPhone el navegador no permite pantalla completa automática.</li>
+  <li>Con control remoto no hay pausa. El progreso no se guarda y todos los eventos están disponibles desde el inicio.</li>
+</ul>
+<div class="note"><b>Para extender el juego.</b> Un evento nuevo es un archivo en <code>src/config/scenarios/</code> agregado a <code>CAMPAIGN</code>, más su fondo en <code>src/art/</code>, sus textos en los dos diccionarios y, si hace falta, una pista en <code>Music.ts</code>. Un accesorio nuevo es una entrada en <code>UPGRADES</code>, un ícono y dos textos.</div>
+</section>
+
+</body>
+</html>

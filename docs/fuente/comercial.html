@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>FLASHED — Presentación del juego</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1b1c22; margin: 0; }
+  .page { width: 210mm; height: 297mm; padding: 16mm 16mm 14mm; position: relative; overflow: hidden; break-after: page; }
+  .page:last-child { break-after: auto; }
+  .dark { background: #0d1020; color: #fff; }
+  h1 { font-family: "Arial Black", "Segoe UI Black", Impact, sans-serif; font-style: italic; font-size: 74pt; line-height: 0.95; margin: 0; letter-spacing: -2px; }
+  h2 { font-family: "Arial Black", "Segoe UI Black", Impact, sans-serif; font-style: italic; font-size: 24pt; margin: 0 0 4mm; line-height: 1.05; }
+  h2 span { color: #ff8a2f; }
+  h3 { font-size: 12.5pt; margin: 0 0 1.5mm; }
+  p { margin: 0 0 3mm; }
+  .lead { font-size: 13pt; line-height: 1.45; }
+  .tag { color: #ff8a2f; font-weight: 800; font-size: 15pt; }
+  img { display: block; width: 100%; border-radius: 6px; border: 2px solid #0d1020; }
+  .dark img { border-color: #2a3052; }
+  .shot { box-shadow: 0 3mm 8mm rgba(0, 0, 0, 0.35); }
+  .cap { font-size: 9pt; color: #6a6c78; margin-top: 1.5mm; }
+  .dark .cap { color: #9aa0b8; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin: 5mm 0; }
+  .step { background: #f3f3f7; border-radius: 6px; padding: 4.5mm; border-top: 4px solid #ff8a2f; }
+  .step b.n { display: block; font-family: "Arial Black", sans-serif; font-size: 22pt; color: #ff8a2f; line-height: 1; margin-bottom: 1.5mm; }
+  .step p { margin: 0; font-size: 10pt; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 6mm; }
+  .card h3 { margin-top: 2mm; }
+  .card h3 small { color: #ff8a2f; font-weight: 800; margin-right: 1.5mm; }
+  .card p { font-size: 9.6pt; margin: 0; color: #3a3c46; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
+  table { border-collapse: collapse; width: 100%; font-size: 10pt; }
+  td { padding: 2mm 2.5mm; border-bottom: 1px solid #dcdde3; vertical-align: top; }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+  .dark td { border-color: #2a3052; }
+  .dark td:first-child { color: #ff8a2f; }
+  .pill { display: inline-block; background: #ff8a2f; color: #0d1020; font-weight: 800; font-size: 9pt; padding: 1mm 3mm; border-radius: 20px; margin: 0 1.5mm 2mm 0; }
+  ul { margin: 0; padding-left: 5mm; }
+  li { margin-bottom: 1.6mm; }
+  .foot { position: absolute; left: 16mm; right: 16mm; bottom: 8mm; font-size: 8.5pt; color: #8d93a3; display: flex; justify-content: space-between; }
+  .beam { position: absolute; height: 2px; transform-origin: left center; opacity: 0.75; }
+</style>
+</head>
+<body>
+
+<!-- Portada -->
+<div class="page dark">
+  <div class="beam" style="left:-10mm; top:40mm; width:260mm; background:#39ff6a; transform:rotate(9deg)"></div>
+  <div class="beam" style="left:-10mm; top:250mm; width:260mm; background:#ff3bd4; transform:rotate(-14deg)"></div>
+  <div class="beam" style="left:150mm; top:-5mm; width:330mm; background:#3bd4ff; transform:rotate(78deg)"></div>
+  <div class="beam" style="left:20mm; top:-5mm; width:330mm; background:#ff5a3b; transform:rotate(69deg)"></div>
+  <div style="position:relative; margin-top:22mm">
+    <h1>FLASHED</h1>
+    <p class="tag" style="margin-top:4mm">¡Que los láseres no te quemen el sensor!</p>
+    <p class="lead" style="max-width:150mm; margin-top:6mm">Un arcade para navegador sobre el oficio más sufrido de la noche: sos el fotógrafo de la fiesta, tenés pocas fotos en la tarjeta y un DJ que no para de prender láseres.</p>
+  </div>
+  <div style="position:relative; margin-top:12mm">
+    <img class="shot" src="img/menu.png" alt="Menú principal">
+  </div>
+  <div style="position:relative; margin-top:10mm">
+    <span class="pill">7 EVENTOS</span><span class="pill">JEFE FINAL</span><span class="pill">COMPUTADORA · CELULAR · TV</span><span class="pill">ESPAÑOL / INGLÉS</span><span class="pill">SIN DESCARGAS</span>
+  </div>
+  <div class="foot"><span>Presentación del juego</span><span>Versión 0.1 · Octubre de 2026</span></div>
+</div>
+
+<!-- La idea y cómo se juega -->
+<div class="page">
+  <h2>Sacá las fotos. <span>Esquivá los láseres.</span></h2>
+  <p class="lead">En cada evento te contratan para lo mismo: volver con las fotos que importan. El problema es que quien maneja las luces disfruta demasiado de sus láseres, y cada haz que te toca quema una parte del sensor de tu cámara.</p>
+  <div style="margin:5mm 0 2mm"><img class="shot" src="img/foto.png" alt="Una foto que cumple un objetivo"></div>
+  <p class="cap">Un flash a tiempo: objetivo cumplido. Arriba, las fotos que quedan en la tarjeta, el estado del sensor y los objetivos del evento.</p>
+
+  <div class="steps">
+    <div class="step"><b class="n">1</b><h3>Encuadrá</h3><p>El marco en el piso muestra qué va a salir. Importa quién entra en la foto y cuándo la sacás.</p></div>
+    <div class="step"><b class="n">2</b><h3>Cumplí los objetivos</h3><p>Cada evento pide tres fotos clave: un momento, un protagonista, una grupal. Sin las tres no te vas.</p></div>
+    <div class="step"><b class="n">3</b><h3>Cuidá la cámara</h3><p>Diez disparos en la tarjeta y tres impactos de láser de margen. Se acaba cualquiera de los dos y perdés el trabajo.</p></div>
+  </div>
+
+  <div class="cols" style="margin-top:6mm">
+    <div>
+      <h3>Lo que lo hace distinto</h3>
+      <ul>
+        <li><b>Cada foto cuenta.</b> Con solo diez disparos, apurarse sale caro.</li>
+        <li><b>Los láseres avisan.</b> Siempre hay un instante para leer el patrón y buscar el hueco.</li>
+        <li><b>Podés devolverla.</b> Un flash al que maneja las luces lo encandila y apaga los láseres un rato… pero gasta una foto.</li>
+        <li><b>Los momentos no esperan.</b> La torta, el vals y el solo de guitarra duran segundos.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Para quién es</h3>
+      <p>Partidas de dos a tres minutos, reglas que se entienden en la primera pantalla y dificultad que sube evento a evento. Pensado para jugar un rato desde el navegador, sin instalar nada ni crear una cuenta.</p>
+      <p>Y con mucho guiño para cualquiera que haya trabajado alguna vez con una cámara en una fiesta.</p>
+    </div>
+  </div>
+  <div class="foot"><span>FLASHED</span><span>2</span></div>
+</div>
+
+<!-- Eventos -->
+<div class="page">
+  <h2>Seis eventos, <span>seis fiestas distintas</span></h2>
+  <p>Cada uno tiene su salón, su gente, su música y sus momentos. De uno al siguiente hay menos tiempo, más movimiento y láseres más seguidos.</p>
+  <div class="grid" style="margin-top:4mm">
+    <div class="card"><img src="img/nivel-iglesia.png" alt=""><h3><small>1</small>Noche de alabanza</h3><p>Iglesia moderna con banda en vivo. Los primeros láseres, lentos y con aviso largo. Música de órgano.</p></div>
+    <div class="card"><img src="img/nivel-cumple.png" alt=""><h3><small>2</small>Cumpleaños infantil</h3><p>Chicos corriendo por todos lados y un cumpleañero que no se queda quieto. Cajita de música.</p></div>
+    <div class="card"><img src="img/nivel-quince.png" alt=""><h3><small>3</small>Cumpleaños de 15</h3><p>Salón de gala, pista en el centro y dos momentos que no se repiten fácil: la entrada y el vals. Reguetón.</p></div>
+    <div class="card"><img src="img/nivel-boda.png" alt=""><h3><small>4</small>Boda</h3><p>Mesas por todas partes, violinistas y poco lugar para pasar. Los momentos de los novios duran poco. Vals.</p></div>
+    <div class="card"><img src="img/nivel-disco.png" alt=""><h3><small>5</small>Discoteca</h3><p>La noche arranca tranquila y se va cargando: tres tandas de láseres cada vez más densas. House.</p></div>
+    <div class="card"><img src="img/nivel-recital.png" alt=""><h3><small>6</small>Recital</h3><p>Público apretado contra la valla y los patrones más exigentes antes del final. Rock.</p></div>
+  </div>
+  <div class="foot"><span>FLASHED</span><span>3</span></div>
+</div>
+
+<!-- Jefe, accesorios, cinemáticas -->
+<div class="page dark">
+  <h2>Y al final, <span>el DJ</span></h2>
+  <div class="cols">
+    <div>
+      <p class="lead">El responsable de todos los láseres. Él ataca con luces; vos, con flashes.</p>
+      <ul>
+        <li>Dos barras de vida: tu sensor contra el DJ.</li>
+        <li>Cada foto con él en cuadro le saca vida; de cerca, el doble.</li>
+        <li>Tres fases. En la última deja la cabina y sale a la pista a buscarte.</li>
+        <li>Un flash lo frena un instante: la ventana justa para alejarte.</li>
+      </ul>
+    </div>
+    <div><img class="shot" src="img/jefe.png" alt="Pelea final"></div>
+  </div>
+
+  <h2 style="margin-top:9mm">Accesorios <span>entre evento y evento</span></h2>
+  <div class="cols">
+    <div>
+      <p>Cada trabajo terminado te deja elegir uno entre tres. Te lo quedás para el resto de la partida, así que cada recorrido se arma distinto.</p>
+      <img src="img/accesorios.png" alt="Elección de accesorio">
+    </div>
+    <table>
+      <tr><td>Cotillón protector</td><td>Absorbe un impacto de láser.</td></tr>
+      <tr><td>Bebida para el DJ</td><td>Lo distrae y apaga los láseres unos segundos.</td></tr>
+      <tr><td>Flash mejorado</td><td>Más puntos por foto y más daño al DJ.</td></tr>
+      <tr><td>Gran angular</td><td>Entra más gente en cada foto.</td></tr>
+      <tr><td>Zapatillas</td><td>Te movés más rápido.</td></tr>
+      <tr><td>Correa de cámara</td><td>Menos espera entre fotos.</td></tr>
+      <tr><td>Tarjeta extra</td><td>Cinco disparos más.</td></tr>
+    </table>
+  </div>
+
+  <h2 style="margin-top:9mm">Con <span>historia</span></h2>
+  <div class="cols">
+    <div><img src="img/cinematica-inicio.png" alt="Cinemática inicial"><p class="cap">Antes de salir: «Espero que esta vez no usen láseres…»</p></div>
+    <div><img src="img/cinematica-final.png" alt="Cinemática final"><p class="cap">Después del jefe: la máquina fundida y el DJ furioso.</p></div>
+  </div>
+  <div class="foot"><span>FLASHED</span><span>4</span></div>
+</div>
+
+<!-- Plataformas y ficha -->
+<div class="page">
+  <h2>Se juega <span>donde estés</span></h2>
+  <p class="lead">Un solo juego que se adapta a la pantalla y al control que tengas a mano. Se abre desde un enlace: no hay nada que instalar.</p>
+  <div style="margin:4mm 0 2mm"><img class="shot" src="img/telefono.png" alt="El juego en un teléfono"></div>
+  <p class="cap">En el celular: palanca a la izquierda, botón de cámara a la derecha. Si lo tenés en vertical, el juego te pide girarlo.</p>
+
+  <table style="margin-top:5mm">
+    <tr><td>Computadora</td><td>Teclado: WASD o flechas para moverse, Espacio para la foto, E para salir. El menú también responde al mouse.</td></tr>
+    <tr><td>Celular y tablet</td><td>Controles táctiles en pantalla y todas las pantallas responden al toque. Se acomoda solo al girar el dispositivo.</td></tr>
+    <tr><td>TV y consola</td><td>Con mando: palanca o cruceta, A para la foto, B para salir, Start para pausar. Con control remoto: flechas, botón central y 0.</td></tr>
+  </table>
+
+  <div class="cols" style="margin-top:7mm">
+    <div>
+      <h3>Características</h3>
+      <ul>
+        <li>Campaña de seis eventos y una pelea final.</li>
+        <li>Selección de evento para volver al que quieras.</li>
+        <li>Siete accesorios que cambian cada partida.</li>
+        <li>Una música original de género distinto por escenario.</li>
+        <li>Dos cinemáticas con diálogos.</li>
+        <li>Español e inglés, intercambiables desde el menú.</li>
+        <li>Música y efectos se apagan por separado en cualquier momento.</li>
+        <li>Personajes variados: en una escena nadie se repite más de dos veces.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Ficha</h3>
+      <table>
+        <tr><td>Género</td><td>Arcade de acción, un jugador</td></tr>
+        <tr><td>Duración</td><td>2 a 3 minutos por evento</td></tr>
+        <tr><td>Plataforma</td><td>Navegador web</td></tr>
+        <tr><td>Peso</td><td>Menos de 2 MB, sin descargas adicionales</td></tr>
+        <tr><td>Conexión</td><td>Solo para abrirlo</td></tr>
+        <tr><td>Datos</td><td>No pide cuenta ni recopila información</td></tr>
+        <tr><td>Idiomas</td><td>Español e inglés</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Probado en computadora y en teléfonos. En tabletas, televisores y mandos el funcionamiento se verificó por emulación.</span><span>5</span></div>
+</div>
+
+</body>
+</html>

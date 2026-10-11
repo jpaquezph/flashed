@@ -85,6 +85,8 @@ export class MenuScene extends Phaser.Scene {
     this.clickable(320 - start.width / 2 - 4, 205, start.width + 8, 17, 'start');
     this.drawLevelsButton();
     this.drawSwitches();
+    // Crédito: chico y tenue, en la esquina de abajo, para que no compita con el menú.
+    label(this, 6, 260.5, t('menu.credit'), 4.6, { color: '#8d93a3', stroke: 1.4 }).setAlpha(0.75);
 
     const kb = this.input.keyboard!;
     kb.on('keydown-SPACE', this.actions.start);
